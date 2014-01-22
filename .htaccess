@@ -1,0 +1,9 @@
+DirectoryIndex index.php
+RewriteEngine On
+
+RewriteCond $1 !\.(static)$
+RewriteRule ^API/([a-zA-Z0-9-]+)/?$ api.php?endpoint=$1 [QSA]
+RewriteRule ^([a-zA-Z0-9-]+)/?$ index.php?view=$1 [QSA]
+
+
+
