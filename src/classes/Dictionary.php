@@ -5,6 +5,7 @@ class Dictionary{
 			'TILTE_USERS' => 'Users',
 			'TILTE_CONTACTS' => 'Contacts',
 			'TILTE_BIRTHDAYS' => 'Birthdays',
+			'NO_RESULTS' => 'There are no results to match that filter'
 	);
 	public static function dictLookup($key){
 		return isset(self::$DICT[$key]) ? self::$DICT[$key] : $key;

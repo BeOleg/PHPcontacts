@@ -22,7 +22,7 @@
       <?php
        Router::includeView('menu'); 
       ?>
-        <div class="col-lg-3">
+        <div class="col-lg-3 sideBar">
 
             <div class="well">
 
@@ -31,12 +31,14 @@
        <div class="col-lg-9">
        		<div class="jumbotron">
               <?php
-                if(Router::showSearchDialog($viewValue))
-                    Router::includeView('search');
+                if(Router::showSearchDialog($viewValue)){
+                      Router::includeView('search');
+                }
+                  
               ?>
-       	 	   <div id="blockContent">
+       	 	   <div id="blockContent" class="tbl">
                <?php 
-         	 	     Router::includeView($viewValue, true);
+         	 	     Router::includeCtrl($viewValue);
          	 	   ?>  
              </div>
  		   </div>

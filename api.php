@@ -4,5 +4,10 @@
   	 throw new exception('400');
   $serializer = SerializerFactory::getSerializer($_GET['endpoint']);
   $data = $serializer->getData($_GET);//get is actually supoer global, but nvm that, it is probper to pass the request as parameter to the serializer
-  Router::Render($_GET['endpoint'], $data)
+  if(isset($data) && sizeof($data) > 0){
+  	Router::Render($_GET['endpoint'], $data);	
+  }
+  else{
+  	Router::RenderEmptyResultSet();
+  }
 ?> 
