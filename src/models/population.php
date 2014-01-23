@@ -52,11 +52,11 @@
 			);
 
 		public function __construct(){
-				foreach(SELF::$tables as $table){
+				foreach(self::$tables as $table){
 					DB::exec($table);
 				}
-				DB::multipleInsert('users', SELF::$users);
-				DB::multipleInsert('contacts', SELF::$contacts);
+				DB::multipleInsert('users', self::$users);
+				DB::multipleInsert('contacts', self::$contacts);
 		}
 	}
 

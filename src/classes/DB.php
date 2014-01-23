@@ -3,7 +3,7 @@
 		public static function getFullName($userId){
 			$sql = "SELECT CONCAT(first_name, ' ', last_name) as fullName from users where id = :uid";
 			try{
-				$conn = SELF::getInstance();
+				$conn = self::getInstance();
 				$sth = $conn->prepare($sql);
 				$sth->bindParam(':uid', $userId, PDO::PARAM_INT);
 				$sth->execute();
@@ -33,7 +33,7 @@
 					
 					}
 					try{
-						$conn = SELF::getInstance();
+						$conn = self::getInstance();
 						$sth = $conn->prepare($sql);
 						if($queryString){
 							$sth->bindValue(':queryString', "%{$queryString}%");
@@ -59,7 +59,7 @@
 				$sql .= ' AND (CONCAT(first_name, " ", last_name) LIKE :queryString OR CONCAT(last_name, " ", first_name) LIKE :queryString)';
 			}			
 			try{
-				$conn = SELF::getInstance();
+				$conn = self::getInstance();
 				$sth = $conn->prepare($sql);
 				$sth->bindParam(':uid', $userId, PDO::PARAM_INT);
 				if($queryString){
@@ -80,7 +80,7 @@
 				$sql .= ' WHERE (CONCAT(u.first_name, " ", u.last_name) LIKE :queryString OR CONCAT(u.last_name, " ", u.first_name) LIKE :queryString)';
 			}
 			try{
-				$conn = SELF::getInstance();
+				$conn = self::getInstance();
 				$sth = $conn->prepare($sql);
 				if($queryString){
 					$sth->bindValue(':queryString', "%{$queryString}%");
@@ -98,7 +98,7 @@
 		          $fieldnames = isset($data[0]) ? array_keys($data[0]) : array_keys($data);
 		          $count_inserts = count(array_values($data));
 		          $count_values = isset($data[0]) ? count(array_values($data[0])) : count(array_values($data));
-		          $conn = SELF::getInstance();
+		          $conn = self::getInstance();
 
 		          for($i = 0; $i < $count_values; $i++)
 		          {
@@ -156,7 +156,7 @@
 		}
 		public function exec($sql){
 			try{
-				$conn = SELF::getInstance();
+				$conn = self::getInstance();
 				$conn->exec($sql);
 			}
 		   catch(PDOException $e){

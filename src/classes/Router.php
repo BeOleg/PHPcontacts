@@ -25,26 +25,26 @@ class Router{
 	);
 	private static $ACTIVE_CLASS = "active";
 	public static function includeView($param){
-		if(isset(SELF::$VIEW_LOOKUP[$param]) && SELF::$VIEW_LOOKUP[$param]){
-			require_once($_SERVER['DOCUMENT_ROOT'] . SELF::$VIEW_LOOKUP[$param]);
+		if(isset(self::$VIEW_LOOKUP[$param]) && self::$VIEW_LOOKUP[$param]){
+			require_once($_SERVER['DOCUMENT_ROOT'] . self::$VIEW_LOOKUP[$param]);
 			return;
 		}
 	
 	}
 	public static function includeCtrl($param){
 		if($param === null){
-			require_once($_SERVER['DOCUMENT_ROOT'] . SELF::$CTRL_LOOKUP['main']);
+			require_once($_SERVER['DOCUMENT_ROOT'] . SEL:F:$CTRL_LOOKUP['main']);
 			return;
 		}
-		if(isset(SELF::$CTRL_LOOKUP[$param]) && SELF::$CTRL_LOOKUP[$param]){
-			require_once($_SERVER['DOCUMENT_ROOT'] . SELF::$CTRL_LOOKUP[$param]);
+		if(isset(self::$CTRL_LOOKUP[$param]) && self::$CTRL_LOOKUP[$param]){
+			require_once($_SERVER['DOCUMENT_ROOT'] . self::$CTRL_LOOKUP[$param]);
 			return;
 		}
-		require_once($_SERVER['DOCUMENT_ROOT'] . SELF::$CTRL_LOOKUP['main']);//404, redirect to main page
+		require_once($_SERVER['DOCUMENT_ROOT'] . self::$CTRL_LOOKUP['main']);//404, redirect to main page
 	}
 	public static function isActivePath($param){
 		$currPath = $_SERVER['REQUEST_URI'];		
-		return strpos($currPath, $param) ? SELF::$ACTIVE_CLASS : '';
+		return strpos($currPath, $param) ? self::$ACTIVE_CLASS : '';
 	}
 	public static function getLink($route){
 		$currPath = $_SERVER['REQUEST_URI'];
@@ -64,10 +64,10 @@ class Router{
 	}
 	public static function getStatics($route, $type){
 		$route = $route == '' ? 'main' : $route;
-		$specific_statics = isset(SELF::$PAGE_SPECIFIC_STATICS[$route]) && isset(SELF::$PAGE_SPECIFIC_STATICS[$route][$type]) && sizeof(SELF::$PAGE_SPECIFIC_STATICS[$route][$type]) > 0 ?
-								 SELF::$PAGE_SPECIFIC_STATICS[$route][$type]  : array();
-		$global_statics = isset(SELF::$GLOBAL_STATICS[$type]) && sizeof(SELF::$GLOBAL_STATICS[$type]) > 0 ?
-								 SELF::$GLOBAL_STATICS[$type] : array();
+		$specific_statics = isset(self::$PAGE_SPECIFIC_STATICS[$route]) && isset(self::$PAGE_SPECIFIC_STATICS[$route][$type]) && sizeof(self::$PAGE_SPECIFIC_STATICS[$route][$type]) > 0 ?
+								 self::$PAGE_SPECIFIC_STATICS[$route][$type]  : array();
+		$global_statics = isset(self::$GLOBAL_STATICS[$type]) && sizeof(self::$GLOBAL_STATICS[$type]) > 0 ?
+								 self::$GLOBAL_STATICS[$type] : array();
 		return array_merge($global_statics, $specific_statics);
 	}
 	public static function showSearchDialog($viewValue){
@@ -75,7 +75,7 @@ class Router{
 		return $boolFlag;
 	}
 	public static function render($ctrl, $data){
-		$views = SELF::ctrlToView($ctrl);
+		$views = self::ctrlToView($ctrl);
 		extract($data);
 		require($_SERVER['DOCUMENT_ROOT'] . $views['header']);
 		foreach($list as $__item){
@@ -83,7 +83,7 @@ class Router{
 		}
 	}
 	public static function RenderEmptyResultSet($ctrl){
-		$views = SELF::ctrlToView($ctrl);
+		$views = self::ctrlToView($ctrl);
 		require_once($_SERVER['DOCUMENT_ROOT'] . $views['header']);
 		$phrase = Dictionary::dictLookup('NO_RESULTS');
 		$msg = "<h4>{$phrase}</h4>";
