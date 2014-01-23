@@ -1,26 +1,76 @@
 <?php
 	class DB extends DBLink{
-		public static function getContacts($userId, $queryString = ' ', $days = null){
-			//Todo: ADD a condition for an empty queryString
-			$sql = "SELECT first_name, last_name, bday,  YEAR(CURDATE())-YEAR(bday) as age_years FROM usesrs u1 
-			WHERE user_id IN (SELECT contact_id FROM contacts WHERE user_id = :uid)
-			AND (CONCAT(first_name, ' ', last_name) LIKE :queryString OR CONCAT(last_name, ' ', first_name) LIKE :queryString";
-			if(isset($days) && $days){
-				$sql .=  " AND DATE_ADD(bday, INTERVAL YEAR(CURDATE())-YEAR(bday) YEAR) 
-            			BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL :days DAY)";//Make the bithday year and the current yer equal, and compare only the day interval
-			
-}			try{
+		public static function getFullName($userId){
+			$sql = "SELECT CONCAT(first_name, ' ', last_name) as fullName from users where id = :uid";
+			try{
 				$conn = SELF::getInstance();
 				$sth = $conn->prepare($sql);
 				$sth->bindParam(':uid', $userId, PDO::PARAM_INT);
-				$sth->bindParam(':queryString', $queryString, PDO::PARAM_STR);
-				if(isset($days) && $days)
-					$sth->bindParam(':days', $days, PDO::PARAM_INT);
+				$sth->execute();
+				$res = $sth->fetch(PDO::FETCH_ASSOC);
+				return $res['fullName'];//TODO: DB entity shouldn't handle string concatination
+			}
+			catch(PDOException $e){
+				Debugger::HandleException($e, $sql);
+			}
+		}
+		public static function getContacts($queryString, $days = null){
+			$sql = "SELECT u1.first_name, u1.last_name, u1.email, u1.id, (SELECT COUNT(1) FROM contacts WHERE user_id = u1.id) AS contact_count,
+			 		YEAR(CURDATE())-YEAR(u1.bday) AS age_years, u1.bday as birthday_date,
+			 		DATEDIFF(DATE_ADD(u1.bday, INTERVAL YEAR(CURDATE())-YEAR(u1.bday) YEAR), NOW()) days_till_bday,
+					CONCAT(u2.first_name, ' ', u2.last_name) as ancestor_name	
+				    FROM contacts c 
+				    INNER JOIN users u1 ON c.contact_id = u1.id
+					INNER JOIN users u2 ON c.user_id = u2.id";
+					if($queryString){
+						$sql .= ' WHERE CONCAT(u1.first_name, " ", u1.last_name) LIKE :queryString OR CONCAT(u1.last_name, " ", u1.first_name) LIKE :queryString';
+					}
+					if(isset($days) && $days){
+						$sql .= " HAVING days_till_bday <= :days";
+						// $sql .=  " AND DATE_ADD(u1.bday, INTERVAL YEAR(CURDATE())-YEAR(u1.bday) YEAR) 
+		    			//BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL :days DAY)";
+		            			  //Make the bithday year and the current yer equal, and compare only the day interval
+					
+					}
+					try{
+						$conn = SELF::getInstance();
+						$sth = $conn->prepare($sql);
+						if($queryString){
+							$sth->bindValue(':queryString', "%{$queryString}%");
+						}
+						if(isset($days) && $days){
+							$sth->bindParam(':days', $days, PDO::PARAM_INT);
+						}
+						$sth->execute();
+						return $sth->fetchAll(PDO::FETCH_ASSOC);
+					}
+					catch(PDOException $e){
+						Debugger::HandleException($e, $sql);
+					}
+		}
+		public static function getContactsByUser($userId, $queryString = null){
+			//Todo: ADD a condition for an empty queryString
+			$sql = "SELECT id, first_name, last_name, bday, email,
+					(SELECT CONCAT(first_name, ' ', last_name) FROM users WHERE id = :uid ) AS ancestor_name,
+					(SELECT COUNT(1) FROM contacts WHERE user_id = u1.id) as contact_count
+					FROM users u1 
+					WHERE u1.id IN (SELECT contact_id FROM contacts c WHERE user_id = :uid)";
+			if($queryString){
+				$sql .= ' AND (CONCAT(first_name, " ", last_name) LIKE :queryString OR CONCAT(last_name, " ", first_name) LIKE :queryString)';
+			}			
+			try{
+				$conn = SELF::getInstance();
+				$sth = $conn->prepare($sql);
+				$sth->bindParam(':uid', $userId, PDO::PARAM_INT);
+				if($queryString){
+					$sth->bindValue(':queryString', "%{$queryString}%");
+				}
+
 				$sth->execute();
 				return $sth->fetchAll(PDO::FETCH_ASSOC);
 			}
 			catch(PDOException $e){
-				Debugger::HandleException($e);
+				Debugger::HandleException($e, $sql);
 			}
 			
 		}
@@ -39,7 +89,7 @@
 				return $sth->fetchAll(PDO::FETCH_ASSOC);
 			}
 			catch(PDOException $e){
-				Debugger::HandleException($e);
+				Debugger::HandleException($e, $sql);
 			}
 		}
 		public function multipleInsert($table, $data = array()){
@@ -101,7 +151,7 @@
 		  }
 		 catch(PDOException $e){
 		 	echo $query;
-	   		Debugger::HandleException($e);
+	   		Debugger::HandleException($e, $sql);
 		  }
 		}
 		public function exec($sql){
@@ -111,7 +161,7 @@
 			}
 		   catch(PDOException $e){
 		 		echo $query;
-	   			Debugger::HandleException($e);
+	   			Debugger::HandleException($e, $sql);
 		  }
 		}
 	}

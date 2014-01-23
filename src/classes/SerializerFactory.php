@@ -8,7 +8,7 @@
 					return new UserSerializer();
 				case 'contacts':
 					return new ContactSerializer();
-				case 'birthdays':
+				case 'bdays':
 					return new BirthDaySerializer();
 				default:
 					return null;

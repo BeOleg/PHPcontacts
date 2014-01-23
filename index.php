@@ -18,39 +18,33 @@
 		}
 	?>
 </head>
-	<body>
-      <?php
-       Router::includeView('menu'); 
-      ?>
-        <div class="col-lg-3 sideBar">
-
-            <div class="well">
-
-           </div>
-        </div>
-       <div class="col-lg-9">
-       		<div class="jumbotron">
-              <?php
-                if(Router::showSearchDialog($viewValue)){
-                      Router::includeView('search');
-                }
-                  
-              ?>
-       	 	   <div id="blockContent" class="tbl">
-               <?php 
-         	 	     Router::includeCtrl($viewValue);
-         	 	   ?>  
-             </div>
- 		   </div>
-        </div>
-        
-
+<body>
+  <?php
+   Router::includeView('menu', $viewValue); 
+  ?>
+ <div class="mainFrame">
+ 		<div class="jumbotron">
         <?php
-          foreach(Router::getStatics($viewValue, 'js') as $path){
-            echo "<script type=\"text/javascript\" src=\"{$path}\"></script>";
+          if(Router::showSearchDialog($viewValue)){
+                Router::includeView('search');
           }
+            
         ?>
-    </body>
+ 	 	   <div id="blockContent" class="tbl">
+         <?php 
+   	 	     Router::includeCtrl($viewValue);
+   	 	   ?>  
+       </div>
+   </div>
+  </div>
+  
+  <?php
+    Router::includeView('footer');
+    foreach(Router::getStatics($viewValue, 'js') as $path){
+      echo "<script type=\"text/javascript\" src=\"{$path}\"></script>";
+    }
+  ?>
+</body>
 </html>
 </body>
 </html>

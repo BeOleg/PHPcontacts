@@ -8,6 +8,29 @@
 		*@description only run once, and make sure that there are no models \ data prior to running that script
 		*run it from the CLI by typing php path/to/script/population.php in your command prompt
 		*/
+		private static $schema = "CREATE DATABASE php_contacts"
+		private static $tables = array(
+			"CREATE TABLE IF NOT EXISTS contacts(
+			    contact_id INT, 
+			    user_id INT,
+			    INDEX uid (user_id),
+			    FOREIGN KEY (user_id) 
+			        REFERENCES users(id)
+			        ON DELETE CASCADE
+			) 
+			CHARACTER SET utf8 COLLATE utf8_general_ci;
+			ENGINE=InnoDB;",
+
+			"CREATE TABLE IF NOT EXISTS users(
+				id int(11) AUTO_INCREMENT PRIMARY KEY,
+				role ENUM('user', 'admin'), 
+				bday DATE, email VARCHAR(50), 
+				first_name VARCHAR(20), 
+			last_name VARCHAR(30)
+			)
+			CHARACTER SET utf8 COLLATE utf8_general_ci;
+			ENGINE=InnoDB;",
+		);
 		private static $users = array(
 			array('first_name' => 'Oleg', 'last_name' => 'Tikhonov', 'email' => 'hellgy@gmail.com', 'bday' => '1990-12-11', 'role' => 'admin'),
 			array('first_name' => 'Veronika', 'last_name' => 'Tikhonov', 'email' => 'veronika.tikhonov@gmail.com', 'bday' => '1987-3-11', 'role' => 'admin'),
@@ -27,25 +50,7 @@
 				array('user_id' => 5, 'contact_id' => 1),
 				array('user_id' => 5, 'contact_id' => 4),//Mercedes has Shaul and oleg
 			);
-		private static $tables = array(
-			"CREATE TABLE IF NOT EXISTS contacts(
-			    contact_id INT, 
-			    user_id INT,
-			    INDEX uid (user_id),
-			    FOREIGN KEY (user_id) 
-			        REFERENCES users(id)
-			        ON DELETE CASCADE
-			)
-			ENGINE=InnoDB;",
-			"CREATE TABLE IF NOT EXISTS users(
-				id int(11) AUTO_INCREMENT PRIMARY KEY,
-				role ENUM('user', 'admin'), 
-				bday DATE, email VARCHAR(50), 
-				first_name VARCHAR(20), 
-			last_name VARCHAR(30)
-			)
-			ENGINE=InnoDB;"
-		)
+
 		public function __construct(){
 				foreach(SELF::$tables as $table){
 					DB::exec($table);

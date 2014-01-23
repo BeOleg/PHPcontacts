@@ -1,7 +1,7 @@
 <?php
 class Router{
 	/**
-	*@description: Basic MVC router, freeware by Oleg Tikhonov
+	*@description: Basic MVC router, open source by Oleg Tikhonov
 	*/
 	private static $VIEW_LOOKUP = array(
 		'menu' => '/src/views/menu.php',
@@ -12,7 +12,7 @@ class Router{
 	private static $CTRL_LOOKUP = array(
 		'main' => '/src/controllers/main.php',//users list, where any user can see only himself, unless he is an admin
 		'bdays' => '/src/controllers/bdays.php',//upcoming birthdays
-		'contacts' => '/src/controllers/contacs.php'//searching your contacts, or everyone if you are an admin
+		'contacts' => '/src/controllers/contacts.php'//searching your contacts, or everyone if you are an admin
 	);
 	private static $GLOBAL_STATICS = array(
 		'css' => array('/static/lib/bootstrap/css/bootstrap.css', '/static/css/custom.css'),
@@ -23,27 +23,28 @@ class Router{
 		'main' => array('js' => array('/static/js/liveSearch.js')),
 		'bdays' => array('js' => array('/static/js/liveSearch.js')),
 	);
+	private static $ACTIVE_CLASS = "active";
 	public static function includeView($param){
-		if(isset(self::$VIEW_LOOKUP[$param]) && self::$VIEW_LOOKUP[$param]){
-			require_once($_SERVER['DOCUMENT_ROOT'] . self::$VIEW_LOOKUP[$param]);
+		if(isset(SELF::$VIEW_LOOKUP[$param]) && SELF::$VIEW_LOOKUP[$param]){
+			require_once($_SERVER['DOCUMENT_ROOT'] . SELF::$VIEW_LOOKUP[$param]);
 			return;
 		}
 	
 	}
 	public static function includeCtrl($param){
 		if($param === null){
-			require_once($_SERVER['DOCUMENT_ROOT'] . self::$CTRL_LOOKUP['main']);
+			require_once($_SERVER['DOCUMENT_ROOT'] . SELF::$CTRL_LOOKUP['main']);
 			return;
 		}
-		if(isset(self::$CTRL_LOOKUP[$param]) && self::$CTRL_LOOKUP[$param]){
-			require_once($_SERVER['DOCUMENT_ROOT'] . self::$CTRL_LOOKUP[$param]);
+		if(isset(SELF::$CTRL_LOOKUP[$param]) && SELF::$CTRL_LOOKUP[$param]){
+			require_once($_SERVER['DOCUMENT_ROOT'] . SELF::$CTRL_LOOKUP[$param]);
 			return;
 		}
-		require_once($_SERVER['DOCUMENT_ROOT'] . self::$VIEW_LOOKUP['main']);//404, redirect to main page
+		require_once($_SERVER['DOCUMENT_ROOT'] . SELF::$CTRL_LOOKUP['main']);//404, redirect to main page
 	}
 	public static function isActivePath($param){
 		$currPath = $_SERVER['REQUEST_URI'];		
-		return strpos($currPath, $param) ? self::$ACTIVE_CLASS : '';
+		return strpos($currPath, $param) ? SELF::$ACTIVE_CLASS : '';
 	}
 	public static function getLink($route){
 		$currPath = $_SERVER['REQUEST_URI'];
@@ -55,13 +56,14 @@ class Router{
 	public static function getTitle($route){
 		$TITLE_LOOKUP = array(
 				'main' => Dictionary::dictLookup('TILTE_GENERAL'),//users list, where any user can see only himself, unless he is an admin
-				'bdays' => Dictionary::dictLookup('TILTE_CONTACTS'),//upcoming birthdays
-				'contacts' => Dictionary::dictLookup('TILTE_BIRTHDAYS'),//searching your contacts, or everyone if you are an admin
+				'bdays' => Dictionary::dictLookup('TILTE_BIRTHDAYS'),//searching your contacts, or everyone if you are an admin
+				'contacts' => Dictionary::dictLookup('TILTE_CONTACTS'),//upcoming birthdays
 				'__default' => Dictionary::dictLookup('TILTE_GENERAL'),
 			);
 		return isset($TITLE_LOOKUP[$route]) ? $TITLE_LOOKUP[$route] : $TITLE_LOOKUP['__default'];
 	}
 	public static function getStatics($route, $type){
+		$route = $route == '' ? 'main' : $route;
 		$specific_statics = isset(SELF::$PAGE_SPECIFIC_STATICS[$route]) && isset(SELF::$PAGE_SPECIFIC_STATICS[$route][$type]) && sizeof(SELF::$PAGE_SPECIFIC_STATICS[$route][$type]) > 0 ?
 								 SELF::$PAGE_SPECIFIC_STATICS[$route][$type]  : array();
 		$global_statics = isset(SELF::$GLOBAL_STATICS[$type]) && sizeof(SELF::$GLOBAL_STATICS[$type]) > 0 ?
@@ -72,13 +74,17 @@ class Router{
 		$boolFlag = $viewValue == '' || $viewValue == 'main' || $viewValue == 'bdays' || $viewValue == 'contacts';
 		return $boolFlag;
 	}
-	public static function render($ctrl, $itmes){
-		$partialPath = SELF::ctrlToView($ctrl);
-		foreach($itmes as $__item){
-			require($_SERVER['DOCUMENT_ROOT'] . $partialPath);
+	public static function render($ctrl, $data){
+		$views = SELF::ctrlToView($ctrl);
+		extract($data);
+		require($_SERVER['DOCUMENT_ROOT'] . $views['header']);
+		foreach($list as $__item){
+			require($_SERVER['DOCUMENT_ROOT'] . $views['partial']);
 		}
 	}
-	public static function RenderEmptyResultSet(){
+	public static function RenderEmptyResultSet($ctrl){
+		$views = SELF::ctrlToView($ctrl);
+		require_once($_SERVER['DOCUMENT_ROOT'] . $views['header']);
 		$phrase = Dictionary::dictLookup('NO_RESULTS');
 		$msg = "<h4>{$phrase}</h4>";
 		echo $msg;
@@ -86,13 +92,13 @@ class Router{
 	private static function ctrlToView($ctrl){
 		switch($ctrl){
 			case 'users':
-				return '/src/views/partials/user.php';
+				return array('header' =>  '/src/views/usersHeader.php', 'partial' => '/src/views/partials/user.php');
 			case 'main':
-				return '/src/views/partials/user.php';
+				return array('header' =>  '/src/views/usersHeader.php', 'partial' => '/src/views/partials/user.php');
 			case 'contacts': 
-				return '/src/views/partials/contacts.php';
+				return array('header' =>  '/src/views/contactsHeader.php', 'partial' => '/src/views/partials/contact.php');
 			case 'bdays':
-				return '/src/views/partials/bdays.php';
+				return array('header' =>  '/src/views/bdaysHeader.php', 'partial' => '/src/views/partials/bday.php');
 			default: 
 				return null;
 		}

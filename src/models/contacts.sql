@@ -6,4 +6,5 @@ CREATE TABLE IF NOT EXISTS contacts(
         REFERENCES users(id)
         ON DELETE CASCADE
 )
+CHARACTER SET utf8 COLLATE utf8_general_ci;
 ENGINE=InnoDB;

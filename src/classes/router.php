@@ -4,14 +4,15 @@ class Router{
 	*@description: Basic MVC router, freeware by Oleg Tikhonov
 	*/
 	private static $VIEW_LOOKUP = array(
-		'main' => Dictionary::dictLookup('TILTE_USERS'), //users list, where any user can see only himself, unless he is an admin
-		'bdays' => Dictionary::dictLookup('TILTE_BIRTHDAYS'), //upcoming birthdays
-		'contacts' => Dictionary::dictLookup('TILTE_CONTACTS'), //searching your contacts, or everyone if you are an admin
-	);
-	private static $TITLE_LOOKUP = array(
 		'main' => '/src/views/index.php',//users list, where any user can see only himself, unless he is an admin
 		'bdays' => '/src/views/bdays.php',//upcoming birthdays
 		'contacts' => '/src/views/search.php'//searching your contacts, or everyone if you are an admin
+	);
+	private static $TITLE_LOOKUP = array(
+
+		'main' => Dictionary::dictLookup('TILTE_USERS'), //users list, where any user can see only himself, unless he is an admin
+		'bdays' => Dictionary::dictLookup('TILTE_BIRTHDAYS'), //upcoming birthdays
+		'contacts' => Dictionary::dictLookup('TILTE_CONTACTS'), //searching your contacts, or everyone if you are an admin
 	);	
 	public static function includeView($param){
 		if($param === null){

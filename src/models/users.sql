@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS users(
 	first_name VARCHAR(20), 
 last_name VARCHAR(30)
 )
+CHARACTER SET utf8 COLLATE utf8_general_ci;
 ENGINE=InnoDB;
 
 
