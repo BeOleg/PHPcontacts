@@ -7,8 +7,9 @@
 		/**
 		*@description only run once, and make sure that there are no models \ data prior to running that script
 		*run it from the CLI by typing php path/to/script/population.php in your command prompt
+		*IMPORTANT: you will need to create the database which's name you can configure at the Config class before running this script
 		*/
-		private static $schema = "CREATE DATABASE php_contacts";
+		//private static $schema = "CREATE DATABASE php_contacts";
 		private static $tables = array(
 			"CREATE TABLE IF NOT EXISTS contacts(
 			    contact_id INT, 
@@ -52,7 +53,6 @@
 			);
 
 		public function __construct(){
-				DB::exec(self::$schema);
 				foreach(self::$tables as $table){
 					DB::exec($table);
 				}
