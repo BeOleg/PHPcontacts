@@ -33,7 +33,7 @@ class Router{
 	}
 	public static function includeCtrl($param){
 		if($param === null){
-			require_once($_SERVER['DOCUMENT_ROOT'] . self:$CTRL_LOOKUP['main']);
+			require_once($_SERVER['DOCUMENT_ROOT'] . self::$CTRL_LOOKUP['main']);
 			return;
 		}
 		if(isset(self::$CTRL_LOOKUP[$param]) && self::$CTRL_LOOKUP[$param]){
