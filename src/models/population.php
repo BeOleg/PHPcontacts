@@ -1,5 +1,5 @@
 <?php
-	require_once(dirname(__FILE__) . '/../classes/config.php');
+	require_once(dirname(__FILE__) . '/../classes/Config.php');
 	require_once(dirname(__FILE__) . '/../classes/Debugger.php');
 	require_once(dirname(__FILE__) . '/../classes/DBLink.php');
 	require_once(dirname(__FILE__) . '/../classes/DB.php');
