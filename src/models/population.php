@@ -1,5 +1,5 @@
 <?php
-	require_once(dirname(__FILE__) . '/../classes/Config.php');
+	require_once(dirname(__FILE__) . '/../classes/config.php');
 	require_once(dirname(__FILE__) . '/../classes/Debugger.php');
 	require_once(dirname(__FILE__) . '/../classes/DBLink.php');
 	require_once(dirname(__FILE__) . '/../classes/DB.php');
@@ -54,6 +54,7 @@
 		public function __construct(){
 				DB::exec(self::$schema);
 				foreach(self::$tables as $table){
+					sleep(5);//otherwise it won't work
 					DB::exec($table);
 				}
 				DB::multipleInsert('users', self::$users);
