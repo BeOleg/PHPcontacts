@@ -20,7 +20,7 @@ abstract class DBLink{
                 return $conn;
              }
             catch (PDOException $e) {
-                Debugger::HandleEception($e);
+                Debugger::HandleException($e);
             }
         }  
 
