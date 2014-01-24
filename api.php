@@ -2,6 +2,7 @@
   require_once($_SERVER['DOCUMENT_ROOT'] . '/src/includes.php');
   if(!isset($_GET['endpoint']) || !$_GET['endpoint']){
     http_response_code(400); 
+    exit(1);
     // throw new exception('Status code: 400');//Raise 400 error, bad request
   }
   	 
@@ -11,7 +12,8 @@
   }
   else{
     http_response_code(400);
-    // throw new exception('Status code:  400');//raid 400, bad request, TODO: catch this exception, or replace it with exit()
+    exit(1);
+    // throw new exception('Status code:  400');//raid 400, bad request, TODO: catch this exception and uncomment
   }
 
   if(isset($data) && isset($data['list']) && sizeof($data['list']) > 0){
