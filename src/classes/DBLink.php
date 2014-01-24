@@ -26,7 +26,7 @@ abstract class DBLink{
 
     }
     public function __destruct() {
-        $conn = null;
+        self::$conn = null;
     }
 
 
