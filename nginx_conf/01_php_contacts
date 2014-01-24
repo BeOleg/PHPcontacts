@@ -1,0 +1,11 @@
+# nginx configuration
+server{
+	index index.php;
+	location /API {
+	  rewrite ^/API/([a-zA-Z0-9-]+)/?$ /api.php?endpoint=$1;
+	}
+
+	location / {
+	  rewrite ^/([a-zA-Z0-9-]+)/?$ /index.php?view=$1;
+	}	
+}
