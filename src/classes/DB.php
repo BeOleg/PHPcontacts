@@ -15,7 +15,7 @@
 			}
 		}
 		public static function getContacts($queryString, $days = null){
-			$sql = "SELECT u1.first_name, u1.last_name, u1.email, u1.id, (SELECT COUNT(1) FROM contacts WHERE user_id = u1.id) AS contact_count,
+			$sql = "SELECT u1.id, u1.first_name, u1.last_name, u1.email, (SELECT COUNT(1) FROM contacts WHERE user_id = u1.id) AS contact_count,
 			 		YEAR(CURDATE())-YEAR(u1.bday) AS age_years, u1.bday as birthday_date,
 			 		DATEDIFF(DATE_ADD(u1.bday, INTERVAL YEAR(CURDATE())-YEAR(u1.bday) YEAR), NOW()) AS days_till_bday,
 					CONCAT(u2.first_name, ' ', u2.last_name) as ancestor_name	
@@ -26,7 +26,7 @@
 						$sql .= ' WHERE CONCAT(u1.first_name, " ", u1.last_name) LIKE :queryString OR CONCAT(u1.last_name, " ", u1.first_name) LIKE :queryString';
 					}
 					if(isset($days) && $days){
-						$sql .= " HAVING days_till_bday <= :days AND days_till_bday > 0";
+						$sql .= " GROUP BY u1.id HAVING days_till_bday <= :days AND days_till_bday > 0";
 						// $sql .=  " AND DATE_ADD(u1.bday, INTERVAL YEAR(CURDATE())-YEAR(u1.bday) YEAR) 
 		    			//BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL :days DAY)";
 		            			  //Make the bithday year and the current yer equal, and compare only the day interval
