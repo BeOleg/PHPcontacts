@@ -82,7 +82,7 @@ class Router{
 			require($_SERVER['DOCUMENT_ROOT'] . $views['partial']);
 		}
 	}
-	public static function RenderEmptyResultSet($ctrl, $__fullName){
+	public static function RenderEmptyResultSet($ctrl, $__fullName = null){
 		$views = self::ctrlToView($ctrl);
 		require_once($_SERVER['DOCUMENT_ROOT'] . $views['header']);
 		$phrase = Dictionary::dictLookup('NO_RESULTS');

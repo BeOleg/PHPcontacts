@@ -26,7 +26,7 @@
 						$sql .= ' WHERE CONCAT(u1.first_name, " ", u1.last_name) LIKE :queryString OR CONCAT(u1.last_name, " ", u1.first_name) LIKE :queryString';
 					}	
 					if(isset($days) && $days){
-						$sql .= " GROUP BY u1.id HAVING days_till_bday <= :days AND days_till_bday > 0";
+						$sql .= " GROUP BY u1.id HAVING days_till_bday <= :days AND days_till_bday > 0";//This determines a range of days and eliminates duplicates, TODO: seperate this functionality to a different, more lightweight function
 						// $sql .=  " AND DATE_ADD(u1.bday, INTERVAL YEAR(CURDATE())-YEAR(u1.bday) YEAR) 
 		    			//BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL :days DAY)";
 		            			  //Make the bithday year and the current yer equal, and compare only the day interval
