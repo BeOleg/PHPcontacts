@@ -20,6 +20,7 @@
   	Router::Render($_GET['endpoint'], $data);	
   }
   else{
-  	Router::RenderEmptyResultSet($_GET['endpoint']);
+    $fullName = isset($data, $data['__fullName']) ? $data['__fullName'] : null;
+  	Router::RenderEmptyResultSet($_GET['endpoint'], $fullName );
   }
 ?> 

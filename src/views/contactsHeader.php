@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="col-lg-9">
+	<div class="col col-lg-9">
 		<h3>
 			<?php echo isset($__fullName) ? sprintf(Dictionary::dictLookup('TILTE_CONTACTS_USER'), $__fullName) : Dictionary::dictLookup('TILTE_CONTACTS'); ?>
 		</h3>

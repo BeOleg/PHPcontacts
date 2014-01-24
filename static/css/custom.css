@@ -11,7 +11,7 @@ footer{
 	padding: 0;
 }
 #blockContent{
-	margin-top: 3%;
+	margin: 3% 1%;
 }
 div.jumbotron{
 	font-size: 14px;
@@ -26,9 +26,15 @@ div.jumbotron{
 .row{
 	display: inline-block;
 	width: 100%;
+	margin: 0;
+	padding: 0;
 }
 .row, .col{
 	text-align: left;
+}
+.col{
+	margin: 0;
+	padding: 0;
 }
 .col-lg-3{
 	width: 25%;
@@ -48,6 +54,17 @@ div.jumbotron{
 }
 .header{
 	font-weight: bold;
+	margin: 0;
+	padding: 0;
+}
+.filter{
+	margin: 0 1%;
+}
+.row.header{
+	margin: 1% 0;
+}
+.row.search{
+	margin:2% 1%;
 }
 .mainFrame{
 	text-align: center;

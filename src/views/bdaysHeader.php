@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="col-lg-12">
+	<div class="col col-lg-12">
 		<h3>
 			<?=Dictionary::dictLookup('TILTE_BIRTHDAYS')?>
 		</h3>
@@ -7,7 +7,7 @@
 </div>
 <?php if(isset($list) && sizeof($list) > 0): ?>
 <div class="row">
-	<div class="col-lg-12 header">
+	<div class="col col-lg-12 header">
 		<div class="row header">
 			<div class="col col-lg-2">
 				First name
