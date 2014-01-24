@@ -18,7 +18,7 @@
 				<!-- <?=Dictionary::dictLookup('LAST_NAME')?> -->
 			</div>
 			<div class="col col-lg-2">
-				Age
+				Becoming
 				<!-- <?=Dictionary::dictLookup('LAST_NAME')?> -->
 			</div>
 			<div class="col col-lg-3">

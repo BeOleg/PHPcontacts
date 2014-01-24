@@ -24,7 +24,7 @@
 					INNER JOIN users u2 ON c.user_id = u2.id";
 					if($queryString){
 						$sql .= ' WHERE CONCAT(u1.first_name, " ", u1.last_name) LIKE :queryString OR CONCAT(u1.last_name, " ", u1.first_name) LIKE :queryString';
-					}
+					}	
 					if(isset($days) && $days){
 						$sql .= " GROUP BY u1.id HAVING days_till_bday <= :days AND days_till_bday > 0";
 						// $sql .=  " AND DATE_ADD(u1.bday, INTERVAL YEAR(CURDATE())-YEAR(u1.bday) YEAR) 
